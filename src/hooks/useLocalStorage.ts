@@ -19,7 +19,7 @@ const DEFAULT_PRODUCTS: Product[] = [
     name: 'Premium Headphones',
     description: 'High-quality wireless headphones with noise cancellation',
     price: 299.99,
-    image: 'https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?auto=compress&cs=tinysrgb&w=500',
+    image: '',
     category: 'Electronics',
     inStock: true
   },
@@ -28,7 +28,7 @@ const DEFAULT_PRODUCTS: Product[] = [
     name: 'Smart Watch',
     description: 'Advanced fitness tracking and smart notifications',
     price: 199.99,
-    image: 'https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg?auto=compress&cs=tinysrgb&w=500',
+    image: '',
     category: 'Electronics',
     inStock: true
   },
@@ -37,7 +37,7 @@ const DEFAULT_PRODUCTS: Product[] = [
     name: 'Wireless Speaker',
     description: 'Portable speaker with amazing sound quality',
     price: 89.99,
-    image: 'https://images.pexels.com/photos/1649771/pexels-photo-1649771.jpeg?auto=compress&cs=tinysrgb&w=500',
+    image: '',
     category: 'Electronics',
     inStock: false
   }

@@ -156,7 +156,7 @@ export function ImageUploader({ onImageSelect, selectedImage, className = '' }: 
         <div className="text-xs text-gray-500">
           <p>• Supported formats: JPG, PNG, GIF, WebP</p>
           <p>• Maximum file size: 5MB</p>
-          <p>• Images are stored locally in your browser</p>
+          <p>• Images are stored locally as blob data in your browser</p>
         </div>
       </div>
     </div>
