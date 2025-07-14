@@ -42,6 +42,7 @@ function App() {
         onUpdateSettings={updateSettings}
         onLogout={handleLogout}
         onExport={exportData}
+        onExportFull={exportFullBackup}
         onImport={importData}
       />
     );

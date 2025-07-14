@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Package, Settings, Download, Upload } from 'lucide-react';
+import { LogOut, Package, Settings, Download, Upload, HardDrive } from 'lucide-react';
 import { ProductManager } from './ProductManager';
 import { SettingsManager } from './SettingsManager';
 import { AppData } from '../../types';
@@ -10,6 +10,7 @@ interface AdminPanelProps {
   onUpdateSettings: (settings: any) => void;
   onLogout: () => void;
   onExport: () => void;
+  onExportFull: () => void;
   onImport: (file: File) => void;
 }
 
@@ -19,6 +20,7 @@ export function AdminPanel({
   onUpdateSettings,
   onLogout,
   onExport,
+  onExportFull,
   onImport
 }: AdminPanelProps) {
   const [activeTab, setActiveTab] = useState<'products' | 'settings'>('products');
@@ -43,7 +45,15 @@ export function AdminPanel({
                 className="flex items-center space-x-2 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
               >
                 <Download className="h-4 w-4" />
-                <span>Export</span>
+                <span>Export Data</span>
+              </button>
+              
+              <button
+                onClick={onExportFull}
+                className="flex items-center space-x-2 px-3 py-2 text-sm text-purple-600 hover:bg-purple-50 rounded-md transition-colors"
+              >
+                <HardDrive className="h-4 w-4" />
+                <span>Full Backup</span>
               </button>
               
               <label className="flex items-center space-x-2 px-3 py-2 text-sm text-green-600 hover:bg-green-50 rounded-md transition-colors cursor-pointer">

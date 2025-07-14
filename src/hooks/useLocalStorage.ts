@@ -90,12 +90,44 @@ export function useLocalStorage() {
     URL.revokeObjectURL(url);
   };
 
+  const exportFullBackup = () => {
+    // Include both store data and images
+    const storeData = localStorage.getItem('storeData');
+    const imageData = localStorage.getItem('storedImages');
+    
+    const fullBackup = {
+      storeData: storeData ? JSON.parse(storeData) : data,
+      imageData: imageData ? JSON.parse(imageData) : [],
+      exportedAt: new Date().toISOString(),
+      version: '1.0'
+    };
+    
+    const dataStr = JSON.stringify(fullBackup, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'store-full-backup.json';
+    link.click();
+    URL.revokeObjectURL(url);
+  };
   const importData = (file: File) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
         const importedData = JSON.parse(e.target?.result as string);
-        saveData(importedData);
+        
+        // Check if it's a full backup or just store data
+        if (importedData.storeData && importedData.imageData) {
+          // Full backup import
+          saveData(importedData.storeData);
+          localStorage.setItem('storedImages', JSON.stringify(importedData.imageData));
+          // Reload the page to refresh image URLs
+          window.location.reload();
+        } else {
+          // Legacy store data import
+          saveData(importedData);
+        }
       } catch (error) {
         alert('Invalid JSON file');
       }
@@ -108,6 +140,7 @@ export function useLocalStorage() {
     updateProducts,
     updateSettings,
     exportData,
+    exportFullBackup,
     importData
   };
 }
