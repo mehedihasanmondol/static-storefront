@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Package, Settings, Download, Upload, HardDrive } from 'lucide-react';
+import { LogOut, Package, Settings, Download, Upload, HardDrive, Home, HelpCircle } from 'lucide-react';
 import { ProductManager } from './ProductManager';
 import { SettingsManager } from './SettingsManager';
 import { AppData } from '../../types';
@@ -12,6 +12,7 @@ interface AdminPanelProps {
   onExport: () => void;
   onExportFull: () => void;
   onImport: (file: File) => void;
+  onShowSetup?: () => void;
 }
 
 export function AdminPanel({
@@ -21,7 +22,8 @@ export function AdminPanel({
   onLogout,
   onExport,
   onExportFull,
-  onImport
+  onImport,
+  onShowSetup
 }: AdminPanelProps) {
   const [activeTab, setActiveTab] = useState<'products' | 'settings'>('products');
 
@@ -40,6 +42,24 @@ export function AdminPanel({
             <h1 className="text-xl font-bold text-gray-900">Admin Panel</h1>
             
             <div className="flex items-center space-x-4">
+              <a
+                href="/"
+                className="flex items-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-md transition-colors"
+              >
+                <Home className="h-4 w-4" />
+                <span>View Store</span>
+              </a>
+              
+              {onShowSetup && (
+                <button
+                  onClick={onShowSetup}
+                  className="flex items-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 rounded-md transition-colors"
+                >
+                  <HelpCircle className="h-4 w-4" />
+                  <span>Setup Guide</span>
+                </button>
+              )}
+              
               <button
                 onClick={onExport}
                 className="flex items-center space-x-2 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-md transition-colors"

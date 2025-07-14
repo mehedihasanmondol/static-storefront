@@ -3,9 +3,10 @@ import { Lock } from 'lucide-react';
 
 interface AdminLoginProps {
   onLogin: (password: string) => void;
+  onShowSetup?: () => void;
 }
 
-export function AdminLogin({ onLogin }: AdminLoginProps) {
+export function AdminLogin({ onLogin, onShowSetup }: AdminLoginProps) {
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -44,6 +45,15 @@ export function AdminLogin({ onLogin }: AdminLoginProps) {
             Login
           </button>
         </form>
+        
+        {onShowSetup && (
+          <button
+            onClick={onShowSetup}
+            className="w-full mt-4 bg-gray-100 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-200 transition-colors"
+          >
+            Setup Guide
+          </button>
+        )}
         
         <div className="mt-6 p-4 bg-blue-50 rounded-md">
           <p className="text-sm text-blue-600">
