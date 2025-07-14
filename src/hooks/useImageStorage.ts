@@ -89,12 +89,18 @@ export function useImageStorage() {
       }
 
       const id = Date.now().toString();
-      const url = URL.createObjectURL(file);
+      
+      // Convert file to base64 data URL for complete blob data
+      const reader = new FileReader();
+      const dataUrl = await new Promise<string>((resolve) => {
+        reader.onload = () => resolve(reader.result as string);
+        reader.readAsDataURL(file);
+      });
       
       const newImage: StoredImage = {
         id,
         name: file.name,
-        url,
+        url: dataUrl, // Use data URL instead of blob URL
         blob: file,
         size: file.size,
         type: file.type,
@@ -115,7 +121,7 @@ export function useImageStorage() {
   const deleteImage = async (id: string) => {
     try {
       const imageToDelete = images.find(img => img.id === id);
-      if (imageToDelete) {
+      if (imageToDelete && imageToDelete.url.startsWith('blob:')) {
         URL.revokeObjectURL(imageToDelete.url);
       }
       

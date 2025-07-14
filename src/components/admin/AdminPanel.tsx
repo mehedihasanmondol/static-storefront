@@ -45,7 +45,7 @@ export function AdminPanel({
                 className="flex items-center space-x-2 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
               >
                 <Download className="h-4 w-4" />
-                <span>Export Data</span>
+                <span>Export JSON</span>
               </button>
               
               <button
@@ -53,12 +53,12 @@ export function AdminPanel({
                 className="flex items-center space-x-2 px-3 py-2 text-sm text-purple-600 hover:bg-purple-50 rounded-md transition-colors"
               >
                 <HardDrive className="h-4 w-4" />
-                <span>Full Backup</span>
+                <span>Full JSON Backup</span>
               </button>
               
               <label className="flex items-center space-x-2 px-3 py-2 text-sm text-green-600 hover:bg-green-50 rounded-md transition-colors cursor-pointer">
                 <Upload className="h-4 w-4" />
-                <span>Import</span>
+                <span>Import JSON</span>
                 <input
                   type="file"
                   accept=".json"

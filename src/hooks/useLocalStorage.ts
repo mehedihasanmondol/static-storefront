@@ -50,6 +50,26 @@ export function useLocalStorage() {
   });
 
   useEffect(() => {
+    loadDataFromJSON();
+  }, []);
+
+  const loadDataFromJSON = async () => {
+    try {
+      // Try to load from a local JSON file first
+      const response = await fetch('/store-data.json');
+      if (response.ok) {
+        const jsonData = await response.json();
+        setData({
+          products: jsonData.products || DEFAULT_PRODUCTS,
+          settings: { ...DEFAULT_SETTINGS, ...jsonData.settings }
+        });
+        return;
+      }
+    } catch (error) {
+      console.log('No JSON file found, using localStorage fallback');
+    }
+
+    // Fallback to localStorage
     const stored = localStorage.getItem('storeData');
     if (stored) {
       try {
@@ -62,13 +82,26 @@ export function useLocalStorage() {
         console.error('Error parsing stored data:', error);
       }
     }
-  }, []);
-
+  };
   const saveData = (newData: AppData) => {
     setData(newData);
-    localStorage.setItem('storeData', JSON.stringify(newData));
+    // Save to localStorage as backup
+    localStorage.setItem('storeData', JSON.stringify(newData, null, 2));
+    
+    // Also trigger JSON file download for manual saving
+    downloadJSON(newData, 'store-data.json');
   };
 
+  const downloadJSON = (data: any, filename: string) => {
+    const dataStr = JSON.stringify(data, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
   const updateProducts = (products: Product[]) => {
     const newData = { ...data, products };
     saveData(newData);
@@ -80,37 +113,23 @@ export function useLocalStorage() {
   };
 
   const exportData = () => {
-    const dataStr = JSON.stringify(data, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'store-data.json';
-    link.click();
-    URL.revokeObjectURL(url);
+    downloadJSON(data, 'store-data.json');
   };
 
   const exportFullBackup = () => {
-    // Include both store data and images
-    const storeData = localStorage.getItem('storeData');
+    // Include both store data and images with complete blob data
     const imageData = localStorage.getItem('storedImages');
     
     const fullBackup = {
-      storeData: storeData ? JSON.parse(storeData) : data,
+      storeData: data,
       imageData: imageData ? JSON.parse(imageData) : [],
       exportedAt: new Date().toISOString(),
-      version: '1.0'
+      version: '2.0'
     };
     
-    const dataStr = JSON.stringify(fullBackup, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'store-full-backup.json';
-    link.click();
-    URL.revokeObjectURL(url);
+    downloadJSON(fullBackup, 'store-full-backup.json');
   };
+
   const importData = (file: File) => {
     const reader = new FileReader();
     reader.onload = (e) => {

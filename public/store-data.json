@@ -1,0 +1,42 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "Premium Headphones",
+      "description": "High-quality wireless headphones with noise cancellation",
+      "price": 299.99,
+      "image": "",
+      "category": "Electronics",
+      "inStock": true
+    },
+    {
+      "id": "2",
+      "name": "Smart Watch",
+      "description": "Advanced fitness tracking and smart notifications",
+      "price": 199.99,
+      "image": "",
+      "category": "Electronics",
+      "inStock": true
+    },
+    {
+      "id": "3",
+      "name": "Wireless Speaker",
+      "description": "Portable speaker with amazing sound quality",
+      "price": 89.99,
+      "image": "",
+      "category": "Electronics",
+      "inStock": false
+    }
+  ],
+  "settings": {
+    "siteName": "Your Store",
+    "tagline": "Amazing products for amazing people",
+    "aboutText": "We offer high-quality products with excellent customer service.",
+    "contactEmail": "contact@yourstore.com",
+    "telegram": "@yourstore",
+    "instagram": "@yourstore",
+    "whatsapp": "+1234567890",
+    "heroTitle": "Welcome to Your Store",
+    "heroSubtitle": "Discover our amazing collection of products"
+  }
+}
