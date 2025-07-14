@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Plus, Edit2, Trash2, Save, X } from 'lucide-react';
+import { Plus, Edit2, Trash2 } from 'lucide-react';
 import { Product } from '../../types';
-import { ImageUploader } from './ImageUploader';
+import { ProductModal } from './ProductModal';
 
 interface ProductManagerProps {
   products: Product[];
@@ -9,53 +9,36 @@ interface ProductManagerProps {
 }
 
 export function ProductManager({ products, onUpdateProducts }: ProductManagerProps) {
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [isCreating, setIsCreating] = useState(false);
-
-  const emptyProduct: Omit<Product, 'id'> = {
-    name: '',
-    description: '',
-    price: 0,
-    image: '',
-    category: '',
-    inStock: true
-  };
-
-  const [formData, setFormData] = useState(emptyProduct);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const handleEdit = (product: Product) => {
-    setEditingProduct(product);
-    setFormData(product);
-    setIsCreating(false);
+    setSelectedProduct(product);
+    setModalMode('edit');
+    setIsModalOpen(true);
   };
 
   const handleCreate = () => {
-    setFormData(emptyProduct);
-    setEditingProduct(null);
-    setIsCreating(true);
+    setSelectedProduct(null);
+    setModalMode('create');
+    setIsModalOpen(true);
   };
 
-  const handleSave = () => {
-    if (isCreating) {
-      const newProduct: Product = {
-        ...formData,
-        id: Date.now().toString()
-      };
+  const handleSave = (product: Product) => {
+    if (modalMode === 'create') {
       onUpdateProducts([...products, newProduct]);
-    } else if (editingProduct) {
+    } else {
       const updatedProducts = products.map(p =>
-        p.id === editingProduct.id ? { ...formData, id: editingProduct.id } : p
+        p.id === product.id ? product : p
       );
       onUpdateProducts(updatedProducts);
     }
-    
-    handleCancel();
   };
 
-  const handleCancel = () => {
-    setEditingProduct(null);
-    setIsCreating(false);
-    setFormData(emptyProduct);
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProduct(null);
   };
 
   const handleDelete = (id: string) => {
@@ -64,9 +47,6 @@ export function ProductManager({ products, onUpdateProducts }: ProductManagerPro
     }
   };
 
-  const updateFormData = (field: keyof typeof formData, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
 
   return (
     <div>
@@ -81,104 +61,13 @@ export function ProductManager({ products, onUpdateProducts }: ProductManagerPro
         </button>
       </div>
 
-      {(isCreating || editingProduct) && (
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h3 className="text-lg font-semibold mb-4">
-            {isCreating ? 'Create New Product' : 'Edit Product'}
-          </h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Name
-              </label>
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) => updateFormData('name', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Category
-              </label>
-              <input
-                type="text"
-                value={formData.category}
-                onChange={(e) => updateFormData('category', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Price ($)
-              </label>
-              <input
-                type="number"
-                step="0.01"
-                value={formData.price}
-                onChange={(e) => updateFormData('price', parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Product Image
-              </label>
-              <ImageUploader
-                onImageSelect={(imageUrl) => updateFormData('image', imageUrl)}
-                selectedImage={formData.image}
-              />
-            </div>
-            
-            <div className="md:col-span-1">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Description
-              </label>
-              <textarea
-                value={formData.description}
-                onChange={(e) => updateFormData('description', e.target.value)}
-                rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            
-            <div className="md:col-span-1">
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  checked={formData.inStock}
-                  onChange={(e) => updateFormData('inStock', e.target.checked)}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <span className="text-sm font-medium text-gray-700">In Stock</span>
-              </label>
-            </div>
-          </div>
-          
-          <div className="flex space-x-3 mt-6">
-            <button
-              onClick={handleSave}
-              className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors"
-            >
-              <Save className="h-4 w-4" />
-              <span>Save</span>
-            </button>
-            
-            <button
-              onClick={handleCancel}
-              className="flex items-center space-x-2 bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition-colors"
-            >
-              <X className="h-4 w-4" />
-              <span>Cancel</span>
-            </button>
-          </div>
-        </div>
-      )}
+      <ProductModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSave={handleSave}
+        product={selectedProduct}
+        mode={modalMode}
+      />
 
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="overflow-x-auto">
@@ -207,11 +96,17 @@ export function ProductManager({ products, onUpdateProducts }: ProductManagerPro
                 <tr key={product.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="h-10 w-10 rounded-lg object-cover mr-3"
-                      />
+                      {product.image ? (
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="h-10 w-10 rounded-lg object-cover mr-3"
+                        />
+                      ) : (
+                        <div className="h-10 w-10 rounded-lg bg-gray-200 mr-3 flex items-center justify-center">
+                          <span className="text-gray-400 text-xs">No img</span>
+                        </div>
+                      )}
                       <div>
                         <div className="text-sm font-medium text-gray-900">
                           {product.name}

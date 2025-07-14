@@ -59,8 +59,8 @@ export function AdminLogin({ onLogin, onShowSetup }: AdminLoginProps) {
           <p className="text-sm text-blue-600">
             <strong>Default password:</strong> admin123
           </p>
-          <p className="text-xs text-blue-500 mt-1">
-            You can change this in the settings panel
+          <p className="text-xs text-blue-500 mt-2">
+            Once logged in, you'll stay logged in across page reloads and when switching between the store and admin panel.
           </p>
         </div>
       </div>
