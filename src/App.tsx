@@ -11,7 +11,7 @@ type AppMode = 'public' | 'login' | 'admin';
 
 function App() {
   const [mode, setMode] = useState<AppMode>('public');
-  const { data, updateProducts, updateSettings, exportData, importData } = useLocalStorage();
+  const { data, updateProducts, updateSettings, exportData, exportFullBackup, importData } = useLocalStorage();
 
   const handleAdminClick = () => {
     setMode('login');
