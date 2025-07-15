@@ -27,13 +27,14 @@ export function ProductManager({ products, onUpdateProducts }: ProductManagerPro
 
   const handleSave = (product: Product) => {
     if (modalMode === 'create') {
-      onUpdateProducts([...products, newProduct]);
+      onUpdateProducts([...products, product]);
     } else {
       const updatedProducts = products.map(p =>
         p.id === product.id ? product : p
       );
       onUpdateProducts(updatedProducts);
     }
+    setIsModalOpen(false);
   };
 
   const handleCloseModal = () => {

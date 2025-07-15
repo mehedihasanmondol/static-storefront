@@ -1,16 +1,13 @@
 import React from 'react';
 import { ShoppingBag, Settings } from 'lucide-react';
 import { SiteSettings } from '../types';
-import { useAuth } from '../hooks/useAuth';
 
 interface HeaderProps {
   settings: SiteSettings;
+  isLoggedIn: boolean;
 }
 
-export function Header({ settings }: HeaderProps) {
-  const { checkAuthStatus } = useAuth();
-  const isLoggedIn = checkAuthStatus();
-
+export function Header({ settings, isLoggedIn }: HeaderProps) {
   return (
     <header className="bg-white shadow-sm border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

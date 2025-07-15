@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { LogOut, Package, Settings, Download, Upload, HardDrive, Home, HelpCircle } from 'lucide-react';
 import { ProductManager } from './ProductManager';
 import { SettingsManager } from './SettingsManager';
+import { ChangesPendingIndicator } from './ChangesPendingIndicator';
 import { AppData } from '../../types';
 
 interface AdminPanelProps {
   data: AppData;
+  hasChanges: boolean;
+  appVersion: number;
   onUpdateProducts: (products: any[]) => void;
   onUpdateSettings: (settings: any) => void;
   onLogout: () => void;
@@ -17,6 +20,8 @@ interface AdminPanelProps {
 
 export function AdminPanel({
   data,
+  hasChanges,
+  appVersion,
   onUpdateProducts,
   onUpdateSettings,
   onLogout,
@@ -31,6 +36,7 @@ export function AdminPanel({
     const file = e.target.files?.[0];
     if (file) {
       onImport(file);
+      e.target.value = ''; // Reset input
     }
   };
 
@@ -39,7 +45,10 @@ export function AdminPanel({
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <h1 className="text-xl font-bold text-gray-900">Admin Panel</h1>
+            <div>
+              <h1 className="text-xl font-bold text-gray-900">Admin Panel</h1>
+              <p className="text-xs text-gray-500">Version {appVersion}</p>
+            </div>
             
             <div className="flex items-center space-x-4">
               <a
@@ -100,6 +109,8 @@ export function AdminPanel({
       </div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <ChangesPendingIndicator hasChanges={hasChanges} onExport={onExport} />
+        
         <div className="flex space-x-1 mb-8">
           <button
             onClick={() => setActiveTab('products')}

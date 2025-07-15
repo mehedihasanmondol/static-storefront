@@ -12,7 +12,6 @@ export function SettingsManager({ settings, onUpdateSettings }: SettingsManagerP
 
   const handleSave = () => {
     onUpdateSettings(formData);
-    alert('Settings saved successfully!');
   };
 
   const updateFormData = (field: keyof SiteSettings, value: string) => {
